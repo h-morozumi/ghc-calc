@@ -1,0 +1,63 @@
+{
+  "version": "2026-06",
+  "currency": "USD",
+  "source": "https://docs.github.com/en/copilot/concepts/billing/organizations-and-enterprises",
+  "disclaimer": "Unofficial, community-maintained figures. Prices are best-effort and may lag behind GitHub's official numbers. Verify against the official documentation before purchasing.",
+  "plans": [
+    {
+      "id": "business",
+      "name": "GitHub Copilot Business",
+      "seatPriceMonthly": 19,
+      "includedCreditsPerSeat": 1900
+    },
+    {
+      "id": "enterprise",
+      "name": "GitHub Copilot Enterprise",
+      "seatPriceMonthly": 39,
+      "includedCreditsPerSeat": 3900
+    }
+  ],
+  "overage": {
+    "creditUnitPrice": 0.01,
+    "note": "Additional AI Credits beyond the included pool are billed per credit (usage-based billing)."
+  },
+  "promotions": [
+    {
+      "id": "summer-2026",
+      "label": "Promotional extra credits (Jun–Aug 2026)",
+      "validFrom": "2026-06-01",
+      "validTo": "2026-08-31",
+      "extraCreditsPerSeat": {
+        "business": 3000,
+        "enterprise": 7000
+      }
+    }
+  ],
+  "fx": {
+    "base": "USD",
+    "rates": {
+      "JPY": 160
+    }
+  },
+  "pppTiers": [
+    {
+      "id": "p1",
+      "label": "P1",
+      "commitUnits": 20000,
+      "discountPct": 5
+    },
+    {
+      "id": "p2",
+      "label": "P2",
+      "commitUnits": 100000,
+      "discountPct": 10
+    },
+    {
+      "id": "p3",
+      "label": "P3",
+      "commitUnits": 500000,
+      "discountPct": 15
+    }
+  ],
+  "pppNote": "PPP = GitHub Pre-Purchase Plan. Commit units (1 CU = 1 USD of GitHub usage) are bought upfront for a one-year term at published tiers: P1 = 20,000 CU ($19,000, 5% off), P2 = 100,000 CU ($90,000, 10% off), P3 = 500,000 CU ($425,000, 15% off). Tiers can be bought in multiples (quantity). Pricing as of June 2026 and is subject to change; review the latest Azure documentation before purchasing. Pre-Purchase discounts do not combine with other discounts."
+}
