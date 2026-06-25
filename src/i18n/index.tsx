@@ -21,6 +21,10 @@ const en: Dict = {
   "form.promo": "Include promotional extra credits",
   "form.promoHint": "Applies when today falls within an active promotion window.",
   "form.currency": "Display currency",
+  "form.fxRate": "FX rate (JPY / USD)",
+  "form.fxRateReset": "Reset to latest",
+  "form.fxRateHint":
+    "Azure's monthly billing rate (default 159.505). Not a live market FX rate.",
 
   "seg.title": "Per-user AI Credit allocation",
   "seg.hint":
@@ -109,6 +113,10 @@ const ja: Dict = {
   "form.promo": "期間限定の追加クレジットを含める",
   "form.promoHint": "本日が有効なプロモ期間内の場合に適用されます。",
   "form.currency": "表示通貨",
+  "form.fxRate": "為替レート（JPY / USD）",
+  "form.fxRateReset": "最新レートに戻す",
+  "form.fxRateHint":
+    "Azure の月次請求レート（既定 159.505）。実勢為替ではありません。",
 
   "seg.title": "ユーザー別 AI Credit 配分",
   "seg.hint":

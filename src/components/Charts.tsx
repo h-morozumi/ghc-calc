@@ -13,6 +13,7 @@ import { useI18n } from "@/i18n";
 import { comparePlans, estimate, headlineMonthly, headlineAnnual } from "@/lib/calc";
 import type { Scenario } from "@/lib/share";
 import { formatCurrency, formatNumber } from "@/lib/format";
+import { formatMoney } from "@/lib/money";
 import {
   Card,
   CardContent,
@@ -33,6 +34,10 @@ export function Charts({ scenario }: Props) {
   const r = estimate(scenario);
   const cur = r.targetCurrency ?? r.currency;
   const rate = r.fxRate ?? 1;
+  const money = (value: number) =>
+    cur === "USD" || cur === "JPY"
+      ? formatMoney(value, cur)
+      : formatCurrency(value, cur, locale);
 
   const costData = [
     {
@@ -96,13 +101,11 @@ export function Charts({ scenario }: Props) {
               <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis
                 tick={{ fontSize: 12 }}
-                tickFormatter={(v) =>
-                  formatCurrency(v as number, cur, locale)
-                }
+                tickFormatter={(v) => money(v as number)}
                 width={90}
               />
               <Tooltip
-                formatter={(v) => formatCurrency(v as number, cur, locale)}
+                formatter={(v) => money(v as number)}
               />
               <Bar dataKey="value" radius={[6, 6, 0, 0]}>
                 {costData.map((d) => (

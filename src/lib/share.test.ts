@@ -131,4 +131,17 @@ describe("normalizeScenario (untrusted input hardening)", () => {
     expect(n.targetCurrency).toBe("USD");
     expect(n.lang).toBe("en");
   });
+
+  it("keeps a valid fxRate override and clears invalid ones", () => {
+    const withOverride = { ...fallback, fxRate: 150 };
+    expect(normalizeScenario({ fxRate: 145 }, withOverride).fxRate).toBe(145);
+
+    for (const bad of [NaN, 0, -1, Infinity, "160" as unknown as number]) {
+      const n = normalizeScenario(
+        { fxRate: bad } as Partial<Scenario>,
+        withOverride,
+      );
+      expect(n.fxRate).toBeUndefined();
+    }
+  });
 });

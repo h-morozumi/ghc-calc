@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, RotateCcw, Trash2 } from "lucide-react";
 
 interface Props {
   scenario: Scenario;
@@ -58,6 +58,16 @@ export function EstimatorForm({ scenario, onChange }: Props) {
     (sum, s) => sum + (Number(s.count) || 0),
     0,
   );
+
+  const displayCurrency = scenario.targetCurrency ?? pricing.fx.base;
+  const bundledRate = pricing.fx.rates[displayCurrency];
+  const showFxEditor =
+    displayCurrency !== pricing.fx.base && bundledRate != null;
+  const fxOverridden =
+    typeof scenario.fxRate === "number" &&
+    Number.isFinite(scenario.fxRate) &&
+    scenario.fxRate > 0;
+  const fxRateValue = fxOverridden ? scenario.fxRate : bundledRate;
 
   return (
     <Card>
@@ -131,6 +141,43 @@ export function EstimatorForm({ scenario, onChange }: Props) {
             </label>
           </div>
         </div>
+
+        {showFxEditor && (
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-2 min-h-8">
+              <Label htmlFor="fx-rate">{t("form.fxRate")}</Label>
+              {fxOverridden && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onChange({ fxRate: undefined })}
+                >
+                  <RotateCcw className="size-4" />
+                  {t("form.fxRateReset")}
+                </Button>
+              )}
+            </div>
+            <Input
+              id="fx-rate"
+              type="number"
+              min={0}
+              step="any"
+              inputMode="decimal"
+              value={fxRateValue ?? ""}
+              onChange={(e) => {
+                const v = Number(e.target.value);
+                onChange({
+                  fxRate:
+                    e.target.value !== "" && Number.isFinite(v) && v > 0
+                      ? v
+                      : undefined,
+                });
+              }}
+            />
+            <CardDescription>{t("form.fxRateHint")}</CardDescription>
+          </div>
+        )}
 
         <div className="flex flex-col gap-3">
           <div>

@@ -11,6 +11,12 @@ export interface Scenario {
   includePromo: boolean;
   ppp: PppSelection;
   targetCurrency?: string;
+  /**
+   * User-overridden FX rate (target units per 1 catalog unit). Present only
+   * when the user has explicitly edited the rate; absence means "use the
+   * bundled latest rate".
+   */
+  fxRate?: number;
   /** UI language preference (e.g. "en", "ja"). */
   lang?: string;
 }
@@ -117,6 +123,12 @@ export function normalizeScenario(
       VALID_CURRENCIES.has(r.targetCurrency)
         ? r.targetCurrency
         : fallback.targetCurrency,
+    fxRate:
+      typeof r.fxRate === "number" &&
+      Number.isFinite(r.fxRate) &&
+      r.fxRate > 0
+        ? r.fxRate
+        : undefined,
     lang:
       typeof r.lang === "string" && VALID_LANGS.has(r.lang)
         ? r.lang

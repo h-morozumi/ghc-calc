@@ -8,8 +8,10 @@ import {
   computePpp,
   normalizePppQuantity,
   finiteNonNeg,
+  resolveEffectiveRate,
   type EstimateInput,
 } from "@/lib/calc";
+import { pricing } from "@/data/pricing";
 
 const BEFORE_PROMO = new Date("2026-05-01T00:00:00Z");
 const DURING_PROMO = new Date("2026-07-01T00:00:00Z");
@@ -24,6 +26,45 @@ function baseInput(overrides: Partial<EstimateInput> = {}): EstimateInput {
     ...overrides,
   };
 }
+
+describe("resolveEffectiveRate (FX override)", () => {
+  const jpy = pricing.fx.rates.JPY;
+
+  it("uses a valid override rate when provided", () => {
+    expect(resolveEffectiveRate("JPY", 150)).toBe(150);
+  });
+
+  it("falls back to the bundled rate when override is undefined", () => {
+    expect(resolveEffectiveRate("JPY", undefined)).toBe(jpy);
+  });
+
+  it("ignores invalid overrides and falls back to the bundled rate", () => {
+    expect(resolveEffectiveRate("JPY", NaN)).toBe(jpy);
+    expect(resolveEffectiveRate("JPY", 0)).toBe(jpy);
+    expect(resolveEffectiveRate("JPY", -10)).toBe(jpy);
+    expect(resolveEffectiveRate("JPY", Infinity)).toBe(jpy);
+  });
+
+  it("returns undefined for the catalog currency", () => {
+    expect(resolveEffectiveRate(pricing.currency, 150)).toBeUndefined();
+    expect(resolveEffectiveRate(undefined, 150)).toBeUndefined();
+  });
+
+  it("flows the override into estimate() results", () => {
+    const withOverride = estimate(
+      baseInput({ targetCurrency: "JPY", fxRate: 150 }),
+    );
+    expect(withOverride.fxRate).toBe(150);
+
+    const withoutOverride = estimate(baseInput({ targetCurrency: "JPY" }));
+    expect(withoutOverride.fxRate).toBe(jpy);
+
+    const invalid = estimate(
+      baseInput({ targetCurrency: "JPY", fxRate: -5 }),
+    );
+    expect(invalid.fxRate).toBe(jpy);
+  });
+});
 
 describe("seat cost and included credits", () => {
   it("computes seat cost with no usage", () => {
@@ -224,7 +265,7 @@ describe("FX conversion", () => {
       BEFORE_PROMO,
     );
     expect(r.targetCurrency).toBe("JPY");
-    expect(r.fxRate).toBe(160);
+    expect(r.fxRate).toBe(pricing.fx.rates.JPY);
   });
 
   it("skips conversion for the catalog currency", () => {

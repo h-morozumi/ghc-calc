@@ -35,6 +35,12 @@ export interface EstimateInput {
   ppp: PppSelection;
   /** Currency to convert into, e.g. "JPY". Omit for catalog currency only. */
   targetCurrency?: string;
+  /**
+   * User override for the FX rate (target units per 1 catalog unit). When set
+   * to a valid positive number it takes precedence over the bundled rate;
+   * otherwise the bundled `pricing.fx.rates[targetCurrency]` is used.
+   */
+  fxRate?: number;
 }
 
 /** Prepayment economics for a one-year PPP commitment, in catalog currency. */
@@ -123,6 +129,24 @@ export function resolvePromoCreditsPerSeat(
 /** Look up a PPP tier by id, falling back to the first tier. */
 export function getPppTier(tierId: string): PppTier {
   return pricing.pppTiers.find((t) => t.id === tierId) ?? pricing.pppTiers[0];
+}
+
+/**
+ * Resolve the effective FX rate for a target currency.
+ *
+ * A valid positive, finite `override` (the user's edited rate) wins; otherwise
+ * the bundled `pricing.fx.rates[targetCurrency]` is used. Returns `undefined`
+ * when no rate applies (e.g. converting to the catalog currency itself).
+ */
+export function resolveEffectiveRate(
+  targetCurrency: string | undefined,
+  override?: number,
+): number | undefined {
+  if (!targetCurrency || targetCurrency === pricing.currency) return undefined;
+  if (typeof override === "number" && Number.isFinite(override) && override > 0) {
+    return override;
+  }
+  return pricing.fx.rates[targetCurrency];
 }
 
 /** Normalize the purchased quantity to a finite whole number in [1, MAX_INPUT]. */
@@ -226,7 +250,7 @@ export function estimate(
   };
 
   if (input.targetCurrency && input.targetCurrency !== pricing.currency) {
-    const rate = pricing.fx.rates[input.targetCurrency];
+    const rate = resolveEffectiveRate(input.targetCurrency, input.fxRate);
     if (rate) {
       result.targetCurrency = input.targetCurrency;
       result.fxRate = rate;
