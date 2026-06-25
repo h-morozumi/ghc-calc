@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "sync:pricing": "tsx scripts/sync-pricing.ts"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.1",
@@ -37,6 +38,7 @@
     "eslint": "^9.17.0",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.0.0",
+    "tsx": "^4.19.2",
     "typescript": "~5.7.2",
     "vite": "^6.0.7",
     "vitest": "^3.2.6"

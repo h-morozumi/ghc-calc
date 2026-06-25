@@ -2,6 +2,7 @@ import { useI18n } from "@/i18n";
 import { estimate } from "@/lib/calc";
 import type { Scenario } from "@/lib/share";
 import { formatCurrency, formatNumber } from "@/lib/format";
+import { formatMoney } from "@/lib/money";
 import {
   Card,
   CardContent,
@@ -50,7 +51,10 @@ export function ResultSummary({ scenario }: Props) {
   const r = estimate(scenario);
   const cur = r.targetCurrency ?? r.currency;
   const rate = r.fxRate ?? 1;
-  const money = (usd: number) => formatCurrency(usd * rate, cur, locale);
+  const money = (usd: number) =>
+    cur === "USD" || cur === "JPY"
+      ? formatMoney(usd * rate, cur)
+      : formatCurrency(usd * rate, cur, locale);
   const credits = (n: number) =>
     `${formatNumber(n, locale)} ${t("result.credits")}`;
 

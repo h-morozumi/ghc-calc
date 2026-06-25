@@ -21,6 +21,7 @@
     "creditUnitPrice": 0.01,
     "note": "Additional AI Credits beyond the included pool are billed per credit (usage-based billing)."
   },
+  "premiumRequestPrice": 0.04,
   "promotions": [
     {
       "id": "summer-2026",
@@ -36,8 +37,12 @@
   "fx": {
     "base": "USD",
     "rates": {
-      "JPY": 160
-    }
+      "JPY": 159.505
+    },
+    "capturedAt": "2026-07-02T03:00:00Z",
+    "source": "Azure Retail Prices API (api-version=2023-01-01-preview)",
+    "recoveredFromSku": "500,000 GHAICCUs",
+    "note": "Azure's fixed monthly billing rate, applied uniformly to USD prices. Displayed with round half-up (2dp) to match the official pricing calculator. Not a live market FX rate."
   },
   "pppTiers": [
     {
