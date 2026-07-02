@@ -1,5 +1,5 @@
 {
-  "version": "2026-06",
+  "version": "2026-07",
   "currency": "USD",
   "source": "https://docs.github.com/en/copilot/concepts/billing/organizations-and-enterprises",
   "disclaimer": "Unofficial, community-maintained figures. Prices are best-effort and may lag behind GitHub's official numbers. Verify against the official documentation before purchasing.",
@@ -37,9 +37,9 @@
   "fx": {
     "base": "USD",
     "rates": {
-      "JPY": 159.505
+      "JPY": 161.735
     },
-    "capturedAt": "2026-07-02T03:00:00Z",
+    "capturedAt": "2026-07-02T04:22:06.630Z",
     "source": "Azure Retail Prices API (api-version=2023-01-01-preview)",
     "recoveredFromSku": "500,000 GHAICCUs",
     "note": "Azure's fixed monthly billing rate, applied uniformly to USD prices. Displayed with round half-up (2dp) to match the official pricing calculator. Not a live market FX rate."
